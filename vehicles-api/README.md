@@ -1,3 +1,15 @@
+References
+
+ 1. https://docs.spring.io/
+
+ 2. https://stackoverflow.com/questions/49316751/spring-data-jpa-
+findone-change-to-optional-how-to-use-this
+
+ 3.
+
+
+
+
 # Vehicles API
 
 A REST API to maintain vehicle data and to provide a complete

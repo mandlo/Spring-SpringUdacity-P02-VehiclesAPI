@@ -64,8 +64,15 @@ public class CarService {
          *   Remove the below code as part of your implementation.
          */
 
-        return repository.findById(id)
-        .orElseThrow(CarNotFoundException :: new);
+        Optional <Car> optionalCar =  repository.findById(id);
+        if (optionalCar.isPresent()) {
+            Car car = optionalCar.get();
+            car.setPrice(priceClient.getPrice(id));
+            car.setLocation(mapsClient.getAddress(car.getLocation()));
+            return car;
+        }  else {
+            throw new CarNotFoundException("Car Not Found");
+        }
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
@@ -74,6 +81,7 @@ public class CarService {
          * Note: The car class file uses @transient, meaning you will need to call
          *   the pricing service each time to get the price.
          */
+
 
 
         /**
