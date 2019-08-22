@@ -1,5 +1,6 @@
 package com.udacity.vehicles;
 
+import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.domain.manufacturer.ManufacturerRepository;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,8 @@ public class VehiclesApiApplication {
     public static void main(String[] args) {
         SpringApplication.run(VehiclesApiApplication.class, args);
     }
+
+
 
     /**
      * Initializes the car manufacturers available to the Vehicle API.
