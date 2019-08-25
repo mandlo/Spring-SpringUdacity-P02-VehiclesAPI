@@ -95,16 +95,11 @@ public class CarControllerTest {
         Car car = getCar();
         mvc.perform(
                 get(new URI("/cars"))
-//                .content(json.write(car).getJson())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect((jsonPath("$cars[0].getId()").value(1L)))
-                .andExpect(status().isOk();
+                .andExpect(status().isOk());
 
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                        .andExpect(content().json("[]"));
-        )
         /**
          * TODO: Add a test to check that the `get` method works by calling
          *   the whole list of vehicles. This should utilize the car from `getCar()`
