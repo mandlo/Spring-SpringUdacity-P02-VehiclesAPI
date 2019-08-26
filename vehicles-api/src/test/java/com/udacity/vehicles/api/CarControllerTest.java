@@ -108,6 +108,7 @@ public class CarControllerTest {
         List<Car> cars = Arrays.asList(car);
         mvc.perform(
             get(new URI("/cars"))
+                .content(json.write(car).getJson())
                 .contentType(MediaType.APPLICATION_JSON_UTF8) //request
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
                 .andExpect((jsonPath("$.cars[0]").value(car)))
@@ -127,11 +128,11 @@ public class CarControllerTest {
         Car car = getCar();
         mvc.perform(
             get(new URI("/cars/1L"))
+                .content(json.write(car).getJson())
                 .contentType(MediaType.APPLICATION_JSON_UTF8) //request
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
                 .andExpect((jsonPath("$.cars[0].getId()").value(1L)))
                 .andExpect(status().isOk());
-
     }
 
     /**
