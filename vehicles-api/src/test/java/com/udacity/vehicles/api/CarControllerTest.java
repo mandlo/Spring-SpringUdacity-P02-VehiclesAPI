@@ -118,7 +118,6 @@ public class CarControllerTest {
                 .andExpect(status().isOk());
     }
 
-
         /**
          * Tests the read operation for a single car by ID.
          * @throws Exception if the read operation for a single car fails
@@ -182,7 +181,7 @@ public class CarControllerTest {
                 .content(json.write(car).getJson())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                //.andExpect(jsonPath("$._embedded.carList", hasSize(0)))
+                .andExpect(jsonPath("$._embedded.carList", hasSize(0)))
                 .andExpect(status().isAccepted());
     }
 
