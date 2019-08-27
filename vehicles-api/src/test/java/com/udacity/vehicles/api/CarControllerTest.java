@@ -152,12 +152,12 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
 
         mvc.perform(
-             put("/cars?id=1L")
+             put("/cars?id=1L", String.valueOf(7L))
                      .content(json.write(car).getJson())
                      .contentType(MediaType.APPLICATION_JSON_UTF8)
                      .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect((jsonPath("$._embedded.carList[0].id").value(1L)))
+                .andExpect(jsonPath("$._embedded.carList[0].id", is(1L)))
                 .andExpect(jsonPath("$._embedded.carList[0].condition", is("USED")))
                 .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
                 .andExpect(status().isOk());
