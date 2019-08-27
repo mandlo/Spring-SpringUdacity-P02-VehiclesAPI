@@ -133,10 +133,11 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
 
         mvc.perform(
-            get(new URI("/cars/3L"))
+            get("/cars?id=8L", String.valueOf(5L))
+                .content(json.write(car).getJson())
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                .andExpect((jsonPath("$._embedded.car.details.mileage", is("32280"))))
-                .andExpect((jsonPath("$.employeeId").value(1L)))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect((jsonPath("$._embedded.carList[0].id").value(1L)))
                 .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
                 .andExpect(status().isOk());
     }
@@ -151,12 +152,12 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
 
         mvc.perform(
-             put(new URI("/cars/4L"))
-                .content(json.write(car).getJson())
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                .andExpect((jsonPath("$.employeeId").value(1L)))
-                .andExpect((jsonPath("$._embedded.car.details.mileage", is("32280"))))
-                .andExpect((jsonPath("$._embedded.car.details.mileage", is("3.6L V6"))))
+             put("/cars?id=1L")
+                     .content(json.write(car).getJson())
+                     .contentType(MediaType.APPLICATION_JSON_UTF8)
+                     .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect((jsonPath("$._embedded.carList[0].id").value(1L)))
                 .andExpect(jsonPath("$._embedded.carList[0].condition", is("USED")))
                 .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
                 .andExpect(status().isOk());
@@ -178,6 +179,8 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
         mvc.perform(
             delete(new URI("/cars/2L"))
+                .content(json.write(car).getJson())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
                 .andExpect(jsonPath("$._embedded.carList", hasSize(0)))
                 .andExpect(status().isAccepted());
