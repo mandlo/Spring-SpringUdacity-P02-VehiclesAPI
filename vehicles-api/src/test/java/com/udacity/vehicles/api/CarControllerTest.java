@@ -10,6 +10,7 @@ import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +24,7 @@ import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import com.udacity.vehicles.service.CarService;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -105,20 +107,22 @@ public class CarControllerTest {
          */
 
         Car car = getCar();
-        List<Car> cars = Arrays.asList(car);
+        List<Car> carList = new ArrayList<>(Arrays.asList(car));
         mvc.perform(
             get(new URI("/cars"))
-                .content(json.write(car).getJson())
-                .contentType(MediaType.APPLICATION_JSON_UTF8) //request
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                .andExpect((jsonPath("$.cars[0]").value(car)))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
+                .andExpect(jsonPath("$._embedded.carList[0].condition",is("USED")))
+                .andExpect(jsonPath("$._embedded.carList[0].details.model", is("Impala")))
                 .andExpect(status().isOk());
     }
 
-    /**
-     * Tests the read operation for a single car by ID.
-     * @throws Exception if the read operation for a single car fails
-     */
+
+        /**
+         * Tests the read operation for a single car by ID.
+         * @throws Exception if the read operation for a single car fails
+         */
     @Test
     public void findCar() throws Exception {
         /**
@@ -126,12 +130,35 @@ public class CarControllerTest {
          *   a vehicle by ID. This should utilize the car from `getCar()` below.
          */
         Car car = getCar();
+        List<Car> carList = new ArrayList<>(Arrays.asList(car));
+
         mvc.perform(
-            get(new URI("/cars/1L"))
-                .content(json.write(car).getJson())
-                .contentType(MediaType.APPLICATION_JSON_UTF8) //request
+            get(new URI("/cars/3L"))
                 .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                .andExpect((jsonPath("$.cars[0].getId()").value(1L)))
+                .andExpect((jsonPath("$._embedded.car.details.mileage", is("32280"))))
+                .andExpect((jsonPath("$.employeeId").value(1L)))
+                .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateCar() throws Exception {
+        /**
+         * TODO: Add a test to check that the `update` method works by calling
+         *   a vehicle by ID. This should utilize the car from `getCar()` below.
+         */
+        Car car = getCar();
+        List<Car> carList = new ArrayList<>(Arrays.asList(car));
+
+        mvc.perform(
+             put(new URI("/cars/4L"))
+                .content(json.write(car).getJson())
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //response
+                .andExpect((jsonPath("$.employeeId").value(1L)))
+                .andExpect((jsonPath("$._embedded.car.details.mileage", is("32280"))))
+                .andExpect((jsonPath("$._embedded.car.details.mileage", is("3.6L V6"))))
+                .andExpect(jsonPath("$._embedded.carList[0].condition", is("USED")))
+                .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
                 .andExpect(status().isOk());
     }
 
@@ -139,7 +166,7 @@ public class CarControllerTest {
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
      */
-    @Test
+    @Test //deleteById
     public void deleteCar() throws Exception {
         /**
          * TODO: Add a test to check whether a vehicle is appropriately deleted
@@ -147,15 +174,13 @@ public class CarControllerTest {
          *   should utilize the car from `getCar()` below.
          */
 
-
         Car car = getCar();
-        List<Car> carList = Arrays.asList(car);
-        assertThat(carList.size(), is(equalTo(1)));
+        List<Car> carList = new ArrayList<>(Arrays.asList(car));
         mvc.perform(
-                delete(new URI("/cars/1L"))
-                        .contentType(MediaType.APPLICATION_JSON_UTF8) //request
-                        .accept(MediaType.APPLICATION_JSON_UTF8)); //response
-        assertThat(carList, hasSize(0));
+            delete(new URI("/cars/2L"))
+                .accept(MediaType.APPLICATION_JSON_UTF8)) //response
+                .andExpect(jsonPath("$._embedded.carList", hasSize(0)))
+                .andExpect(status().isAccepted());
     }
 
     /**
