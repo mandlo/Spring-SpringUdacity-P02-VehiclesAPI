@@ -151,14 +151,10 @@ public class CarControllerTest {
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
 
         mvc.perform(
-             put("/cars?id=1L", String.valueOf(7L))
-                     .content(json.write(car).getJson())
-                     .contentType(MediaType.APPLICATION_JSON_UTF8)
-                     .accept(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$._embedded.carList[0].id", is(1L)))
-                .andExpect(jsonPath("$._embedded.carList[0].condition", is("USED")))
-                .andExpect(jsonPath("$._embedded.carList", hasSize(1)))
+             put("/cars/{id}", String.valueOf(7L))
+                .content(json.write(car).getJson())
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
     }
 
@@ -166,23 +162,13 @@ public class CarControllerTest {
      * Tests the deletion of a single car by ID.
      * @throws Exception if the delete operation of a vehicle fails
      */
-    @Test //deleteById
+    @Test
     public void deleteCar() throws Exception {
-        /**
-         * TODO: Add a test to check whether a vehicle is appropriately deleted
-         *   when the `delete` method is called from the Car Controller. This
-         *   should utilize the car from `getCar()` below.
-         */
-
         Car car = getCar();
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
         mvc.perform(
-            delete("/cars?id=2L", String.valueOf(6L))
-                .content(json.write(car).getJson())
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8)) //response
-                .andExpect(jsonPath("$._embedded.carList", hasSize(0)))
-                .andExpect(status().isAccepted());
+            delete("/cars/{id}", String.valueOf(8L)))
+                .andExpect(status().isNoContent());
     }
 
     /**
