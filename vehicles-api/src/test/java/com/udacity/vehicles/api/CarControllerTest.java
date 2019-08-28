@@ -167,7 +167,7 @@ public class CarControllerTest {
         Car car = getCar();
         List<Car> carList = new ArrayList<>(Arrays.asList(car));
         mvc.perform(
-            delete("/cars/{id}", String.valueOf(8L)))
+            delete("/cars/{id}",String.valueOf(7L) ))
                 .andExpect(status().isNoContent());
     }
 
