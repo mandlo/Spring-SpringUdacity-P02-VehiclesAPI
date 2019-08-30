@@ -21,7 +21,7 @@ public class PriceRepository {
     Price price;
 
     @GetMapping("/{vehicleId}")
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason ="VehicleId is invalid")
+    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason ="Price Not Found")
     public ResponseEntity<Price> get(@RequestParam Long vehicleId) {
         BigDecimal randomDecimal = new BigDecimal
                 (BigInteger.valueOf(new Random().nextInt(100001)), 2);
