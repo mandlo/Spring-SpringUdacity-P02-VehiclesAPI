@@ -31,12 +31,6 @@ import static org.hamcrest.Matchers.greaterThan;
 @AutoConfigureJsonTesters
 public class PricingServiceApplicationTests {
 
-//	@Autowired
-//	private JacksonTester<Price> json;
-//
-//	@MockBean
-//	PriceRepository priceRepository;
-
 	@Autowired
 	PricingServiceApplication pricingServiceApplication;
 

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Implements a REST-based controller for the Vehicles API.
  */
+
 @RestController
 @RequestMapping("/cars")
 class CarController {
