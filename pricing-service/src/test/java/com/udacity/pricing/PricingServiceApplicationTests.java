@@ -37,13 +37,17 @@ public class PricingServiceApplicationTests {
 	@Autowired
 	private MockMvc mvc;
 
+	@Autowired
+	private JacksonTester<Price> json;
+
 	@Before
 	public void setup() {
         BigDecimal bd = BigDecimal.valueOf(10.0001);
 		Price priceCar = getPrice();
-		priceCar.setVehicleId(1L);
+		priceCar.setVehicleId(any());
 		priceCar.setCurrency("USD");
 		priceCar.setPrice(bd);
+
 	}
 
 	@Test
@@ -55,15 +59,10 @@ public class PricingServiceApplicationTests {
 
 		Price priceCar = getPrice();
 		mvc.perform(
-				get("/services/price?vehicleId={vehicleId}", String.valueOf(1L))
-						//.content(json.write(priceCar).getJson())
+				get("/services/price?vehicleId={vehicleId}", 1L)
 						.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.accept(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$.vehicleId", is(1)))
-				.andExpect(jsonPath("$.currency", is("USD")))
-				.andExpect(jsonPath("$.price", greaterThan(0.0)));
+				        .accept(MediaType.APPLICATION_JSON_UTF8))
+				        .andExpect(status().isNotFound());
 	}
 
 	/**
